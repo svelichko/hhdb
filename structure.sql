@@ -5,7 +5,6 @@ CREATE TABLE users
     registered TIMESTAMP DEFAULT now() NOT NULL,
     last_visited TIMESTAMP DEFAULT now() NOT NULL
 );
-CREATE UNIQUE INDEX users_id_uindex ON users (id);
 CREATE INDEX users_email_index ON users (email);
 COMMENT ON COLUMN public.users.email IS 'адрес электронной почты';
 COMMENT ON COLUMN public.users.registered IS 'время регистрации';
@@ -23,7 +22,6 @@ CREATE TABLE public.vacancies
     skills VARCHAR(1000) DEFAULT NULL,
     published TIMESTAMP DEFAULT now() NOT NULL
 );
-CREATE UNIQUE INDEX vacancies_id_uindex ON public.vacancies (id);
 CREATE INDEX vacancies_company_name_index ON public.vacancies (company_name);
 CREATE INDEX vacancies_position_name_index ON public.vacancies (position_name);
 CREATE INDEX vacancies_min_salary_index ON public.vacancies (min_salary);
@@ -50,9 +48,8 @@ CREATE TABLE public.resumes
     experience INT NOT NULL,
     skills VARCHAR(1000) NOT NULL,
     user_id BIGINT NOT NULL,
-    CONSTRAINT resumes_users_id_fk FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT resumes_users_id_fk FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
-CREATE UNIQUE INDEX resumes_id_uindex ON public.resumes (id);
 CREATE INDEX resumes_position_name_index ON public.resumes (position_name);
 CREATE INDEX resumes_first_last_name_index ON public.resumes (first_last_name);
 CREATE INDEX resumes_age_index ON public.resumes (age);
@@ -73,10 +70,9 @@ CREATE TABLE public.responses
     id BIGSERIAL PRIMARY KEY NOT NULL,
     resume_id BIGINT NOT NULL,
     vacancy_id BIGINT NOT NULL,
-    CONSTRAINT responses_resumes_id_fk FOREIGN KEY (resume_id) REFERENCES resumes (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT responses_vacancies_id_fk FOREIGN KEY (vacancy_id) REFERENCES vacancies (id) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT responses_resumes_id_fk FOREIGN KEY (resume_id) REFERENCES resumes (id) ON DELETE CASCADE,
+    CONSTRAINT responses_vacancies_id_fk FOREIGN KEY (vacancy_id) REFERENCES vacancies (id) ON DELETE CASCADE
 );
-CREATE UNIQUE INDEX responses_id_uindex ON public.responses (id);
 CREATE INDEX responses_resume_id_index ON public.responses (resume_id);
 CREATE INDEX responses_vacancy_id_index ON public.responses (vacancy_id);
 CREATE UNIQUE INDEX responses_resume_id_vacancy_id_index ON public.responses (resume_id, vacancy_id);
@@ -89,9 +85,8 @@ CREATE TABLE public.messages
     id BIGSERIAL PRIMARY KEY NOT NULL,
     message VARCHAR(1000) NOT NULL,
     response_id BIGINT NOT NULL,
-    CONSTRAINT messages_responses_id_fk FOREIGN KEY (response_id) REFERENCES responses (id) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT messages_responses_id_fk FOREIGN KEY (response_id) REFERENCES responses (id) ON DELETE CASCADE
 );
-CREATE UNIQUE INDEX messages_id_uindex ON public.messages (id);
 COMMENT ON COLUMN public.messages.message IS 'текст сообщения';
 COMMENT ON COLUMN public.messages.response_id IS 'ссылка на отклик';
 COMMENT ON TABLE public.messages IS 'сообщения';
