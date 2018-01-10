@@ -75,7 +75,6 @@ CREATE TABLE public.responses
 );
 CREATE INDEX responses_resume_id_index ON public.responses (resume_id);
 CREATE INDEX responses_vacancy_id_index ON public.responses (vacancy_id);
-CREATE UNIQUE INDEX responses_resume_id_vacancy_id_index ON public.responses (resume_id, vacancy_id);
 COMMENT ON COLUMN public.responses.resume_id IS 'ссылка на резюме';
 COMMENT ON COLUMN public.responses.vacancy_id IS 'ссылка на вакансию';
 COMMENT ON TABLE public.responses IS 'отклики';
